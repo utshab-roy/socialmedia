@@ -19,7 +19,7 @@
     <div class="row">
         <div class="col-md-6 offset-md-3">
 <!--            login section-->
-            <div id="form_messages"></div>
+            <div id="form_messages" class="mt-3"></div>
             <form class="needs-validation" action="index.php" method="post" id="login_form">
                 <h1 class="display-3">Social Media</h1>
 <!--                <a href="../socialmedia"><img src="https://image.ibb.co/eiByzJ/logo.jpg" alt="logo" width ="500px" border="0"></a>-->

@@ -79,6 +79,7 @@ if(isset($_POST['registration']) && intval($_POST['registration']) == 1){
         echo json_encode($output);
     }else{
         //form is not valid
+        $output['validation_messages'] = $validation_messages;
         echo json_encode($output);
     }
 }

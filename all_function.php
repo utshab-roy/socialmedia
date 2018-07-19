@@ -70,6 +70,11 @@ function user_registration($firstname, $lastname, $email, $password){
     return $success_messages;
 }
 
+/**
+ * checks if the email already exist or not
+ * @param $email
+ * @return bool
+ */
 function email_exists( $email){
     global  $conn_oop;
 

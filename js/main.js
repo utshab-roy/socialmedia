@@ -3,6 +3,7 @@ jQuery(document).ready(function ($) {
     var $registration_form    = $("#registration_form");
     var $login_form     = $("#login_form");
 
+    //login form handel begin
     $login_form.on('submit', function (event) {
         event.preventDefault();
         console.log('Login form submitted, sending ajax request');
@@ -24,10 +25,9 @@ jQuery(document).ready(function ($) {
                 if (data.validation == 0) {
                     //highlight the error fields and show error messages
                     var $validation_messages = data.validation_messages;
-                    // console.log($validation_messages['email']);
-
+                    $('.error').remove();
                     $.each($validation_messages, function (index, value) {
-                        var $error_field = '<label id="' + index + '-error" class="error" for="' + index + '">' + value + '</label>';
+                        var $error_field = '<label id="' + index + '-error" class="error"  style="color: red" for="' + index + '">' + value + '</label>';
                         if ($('#' + index + '-error').length > 0) {
                             $('#' + index+ '-error').html($error_field).show();
                         }
@@ -44,9 +44,8 @@ jQuery(document).ready(function ($) {
                     $.each($success_messages, function (index, value) {
                         if (index === 'login'){
                             $form_message.html('<div class="alert alert-success" role="alert">'+value+'</div>').show();
-                            // window.location.replace("homepage.php");
-                            // $('#login_form').remove();
-                            // $form_message.append('<a type="button" class="btn btn-primary btn-lg" href="admin/index.php">Admin Panel</a>').show();
+                            window.location.replace("homepage.php");
+
                         }else{
                             $form_message.html('<div class="alert alert-danger" role="alert">'+value+'</div>').show();
                         }
@@ -60,6 +59,7 @@ jQuery(document).ready(function ($) {
         }); // end of ajax method
     });//end of login form
 
+    //registration form handel begin
     $registration_form.on('submit', function (event) {
 
         event.preventDefault();
@@ -81,14 +81,14 @@ jQuery(document).ready(function ($) {
                 if (data.validation == 0) {
                     //highlight the error fields and show error messages
                     var $validation_messages = data.validation_messages;
-
+                    $('.error').remove();
                     $.each($validation_messages, function (index, value) {
-                        var $error_field = '<label id="' + index + '-error" class="error" for="' + index + '">' + value + '</label>';
+                        var $error_field = '<label id="' + index + '-error" class="error"  style="color: red" for="' + index + '">' + value + '</label>';
                         if ($('#' + index + '-error').length > 0) {
                             $('#' + index+ '-error').html($error_field).show();
                         }
                         else {
-                            $('#login_' + index).after($error_field);
+                            $('#' + index).after($error_field);
                         }
                     });
                 }
