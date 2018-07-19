@@ -1,4 +1,7 @@
-
+<?php
+//session_start();
+//var_dump($_SESSION);
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -60,7 +63,7 @@
             </div>
             <div class="modal-body">
 <!--                Sign up section-->
-                <form action="index.php" method="post" class="needs-validation" id="signup_form" novalidate>
+                <form action="index.php" method="post" class="needs-validation" id="registration_form" novalidate>
                     <div class="form-row">
                         <div class="col-md-12 mb-3">
                             <label for="first_name">First name</label>
@@ -77,20 +80,20 @@
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
-                            <label for="signup_email">Email</label>
+                            <label for="email">Email</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="inputGroupPrepend">@</span>
                                 </div>
-                                <input type="email" class="form-control" id="signup_email" name="email" placeholder="Email address" aria-describedby="inputGroupPrepend" required>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Email address" aria-describedby="inputGroupPrepend" required>
                                 <div class="invalid-feedback">
                                     Please enter your email.
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
-                            <label for="signup_psw">Password</label>
-                            <input type="password" class="form-control" id="signup_psw" name="psw" placeholder="Password" value="" required>
+                            <label for="psw">Password</label>
+                            <input type="password" class="form-control" id="psw" name="psw" placeholder="Password" value="" required>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
@@ -114,6 +117,9 @@
                             </div>
                         </div>
                     </div>
+
+                    <input type="hidden" name="registration" id="registration" value="1">
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="submit"  class="btn btn-primary"  name="user_registration" value="1">Submit form</button>
