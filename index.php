@@ -1,117 +1,3 @@
-<?php
-include 'config.php';
-
-$first_name = $last_name = $email = $password = $password_confirm = '';
-
-$first_name_error = $last_name_error = '';
-$email_error = '';
-$password_error = '';
-$general_error = '';
-$password_confirm_error = '';
-
-$form_valid = true;
-
-if (isset($_POST['user_registration']) && intval($_POST['user_registration']) == 1) {
-    //retrieving data from the form
-    if (isset($_POST['first_name'])) {
-        $first_name = $_POST['first_name'];
-        if (empty($first_name)) {
-            $form_valid = false;
-            $first_name_error = 'First name is empty';
-        }
-    }
-    if (isset($_POST['last_name'])) {
-        $last_name = $_POST['last_name'];
-        if (empty($last_name)) {
-            $form_valid = false;
-            $last_name_error = 'Last name is empty';
-        }
-    }
-
-    if (isset($_POST['email'])) {
-        $email = $_POST['email'];
-        if (empty($email)) {
-            $form_valid = false;
-            $email_error = 'Email is empty';
-        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $form_valid = false;
-            $email_error = 'Email is not valid';
-        }
-    }
-
-    if (isset($_POST['psw'])) {
-        $password = $_POST['psw'];
-        if (empty($password)) {
-            $form_valid = false;
-            $password_error = 'Password is empty';
-        }
-    }
-
-    if (isset($_POST['psw_confirm'])) {
-        $password_confirm = $_POST['psw_confirm'];
-        if (empty($password_confirm)) {
-            $form_valid = false;
-            $password_error = 'Confirm your password';
-        }
-    }
-
-    //checking whether the password matches
-    if ($form_valid) {
-        if (isset($_POST['psw']) && isset($_POST['psw_confirm'])) {
-            $form_valid = ($password === $password_confirm) ? true : false;
-            $password_confirm_error = 'password did not match';
-        }
-    }
-
-    if($form_valid){
-        global $conn;
-        //inserting data into database from register page
-        $sql = "INSERT INTO users (first_name, last_name, email, password) VALUES ('$first_name', '$last_name', '$email', MD5('$password'))";
-        if ($conn->query($sql) === TRUE) {
-//            echo 'Registration completed.';
-        } else {
-            $general_error = $conn->error;
-            echo $general_error;
-        }
-    }
-}
-
-if (isset($_POST['user_login']) && intval($_POST['user_login']) == 1) {
-    //retrieving data from the form
-    if (isset($_POST['email'])) {
-        $email = $_POST['email'];
-        if (empty($email)) {
-            $form_valid = false;
-            $email_error = 'Email is empty';
-        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $form_valid = false;
-            $email_error = 'Email is not valid';
-        }
-    }
-
-    if (isset($_POST['psw'])) {
-        $password = $_POST['psw'];
-        if (empty($password)) {
-            $form_valid = false;
-            $password_error = 'Password is empty';
-        }
-    }
-
-    if($form_valid){
-        global  $conn;
-
-        $sql = "SELECT * FROM users WHERE email='$email' AND password=MD5('$password')";
-        $result = $conn->query($sql);
-        if ($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-//            echo "logged in";
-        } else {
-            echo "<h3 class='text-danger' >Wrong email or password</h3>";
-        }
-    }
-}
-?>
-
 
 <!doctype html>
 <html lang="en">
@@ -129,17 +15,17 @@ if (isset($_POST['user_login']) && intval($_POST['user_login']) == 1) {
 <div class="container text-center">
     <div class="row">
         <div class="col-md-6 offset-md-3">
-<!--            sign in section-->
-            <form class="form-signin" action="index.php" method="post">
+<!--            login section-->
+            <form class="needs-validation" action="index.php" method="post" id="login_form">
                 <h1 class="display-3">Social Media</h1>
 <!--                <a href="../socialmedia"><img src="https://image.ibb.co/eiByzJ/logo.jpg" alt="logo" width ="500px" border="0"></a>-->
                 <h1 class="h3 mb-3 mt-3 font-weight-normal">Please sign in</h1>
 
-                <label for="email" class="sr-only">Email address</label>
-                <input type="email" id="email" name="email" class="form-control" placeholder="Email address" required="" autofocus="">
+                <label for="login_email" class="sr-only">Email address</label>
+                <input type="email" id="login_email" name="email" class="form-control" placeholder="Email address" required="" autofocus="">
 
-                <label for="psw" class="sr-only">Password</label>
-                <input type="password" id="psw" name="psw" class="form-control" placeholder="Password" required="">
+                <label for="login_psw" class="sr-only">Password</label>
+                <input type="password" id="login_psw" name="psw" class="form-control" placeholder="Password" required="">
                 <div class="checkbox mb-3">
                     <label>
                         <input type="checkbox" value="remember-me"> Remember me
@@ -170,7 +56,7 @@ if (isset($_POST['user_login']) && intval($_POST['user_login']) == 1) {
             </div>
             <div class="modal-body">
 <!--                Sign up section-->
-                <form action="index.php" method="post" class="needs-validation" novalidate>
+                <form action="index.php" method="post" class="needs-validation" id="signup_form" novalidate>
                     <div class="form-row">
                         <div class="col-md-12 mb-3">
                             <label for="first_name">First name</label>
@@ -187,20 +73,20 @@ if (isset($_POST['user_login']) && intval($_POST['user_login']) == 1) {
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
-                            <label for="email">Email</label>
+                            <label for="signup_email">Email</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="inputGroupPrepend">@</span>
                                 </div>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="Username" aria-describedby="inputGroupPrepend" required>
+                                <input type="email" class="form-control" id="signup_email" name="email" placeholder="Email address" aria-describedby="inputGroupPrepend" required>
                                 <div class="invalid-feedback">
                                     Please enter your email.
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
-                            <label for="psw">Password</label>
-                            <input type="password" class="form-control" id="psw" name="psw" placeholder="Password" value="" required>
+                            <label for="signup_psw">Password</label>
+                            <input type="password" class="form-control" id="signup_psw" name="psw" placeholder="Password" value="" required>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
@@ -236,31 +122,32 @@ if (isset($_POST['user_login']) && intval($_POST['user_login']) == 1) {
 </div>
 
 
-<script>
-    // Example starter JavaScript for disabling form submissions if there are invalid fields
-    (function() {
-        'use strict';
-        window.addEventListener('load', function() {
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.getElementsByClassName('needs-validation');
-            // Loop over them and prevent submission
-            var validation = Array.prototype.filter.call(forms, function(form) {
-                form.addEventListener('submit', function(event) {
-                    if (form.checkValidity() === false) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        }, false);
-    })();
-</script>
+<!--<script>-->
+<!--    // Example starter JavaScript for disabling form submissions if there are invalid fields-->
+<!--    (function() {-->
+<!--        'use strict';-->
+<!--        window.addEventListener('load', function() {-->
+<!--            // Fetch all the forms we want to apply custom Bootstrap validation styles to-->
+<!--            var forms = document.getElementsByClassName('needs-validation');-->
+<!--            // Loop over them and prevent submission-->
+<!--            var validation = Array.prototype.filter.call(forms, function(form) {-->
+<!--                form.addEventListener('submit', function(event) {-->
+<!--                    if (form.checkValidity() === false) {-->
+<!--                        event.preventDefault();-->
+<!--                        event.stopPropagation();-->
+<!--                    }-->
+<!--                    form.classList.add('was-validated');-->
+<!--                }, false);-->
+<!--            });-->
+<!--        }, false);-->
+<!--    })();-->
+<!--</script>-->
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
