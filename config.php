@@ -12,10 +12,10 @@ $password = "";
 $dbname = "socialmedia";
 
 // Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn_oop = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+if ($conn_oop->connect_error) {
+    die("Connection failed: " . $conn_oop->connect_error);
 }
 //echo "Database Connected successfully";

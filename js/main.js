@@ -8,7 +8,7 @@ jQuery(document).ready(function ($) {
         console.log('Login form submitted, sending ajax request');
 
         var $login_form_data_serialized = $login_form.serialize();
-        console.log($login_form_data_serialized);
+        // console.log($login_form_data_serialized);
         $.ajax({
             type: "POST",
             url: "login_ajax.php",
@@ -19,26 +19,24 @@ jQuery(document).ready(function ($) {
             },
             cache: false,
             success: function (data) {
-                // console.log(data);
+                console.log(data);
 
                 if (data.validation == 0) {
                     //highlight the error fields and show error messages
                     var $validation_messages = data.validation_messages;
-                    // console.log($validation_messages);
-
+                    // console.log($validation_messages['email']);
 
                     $.each($validation_messages, function (index, value) {
                         var $error_field = '<label id="' + index + '-error" class="error" for="' + index + '">' + value + '</label>';
                         if ($('#' + index + '-error').length > 0) {
-                            $('#' + index + '-error').html(value).show();
+                            $('#' + index+ '-error').html($error_field).show();
                         }
                         else {
-                            $('#' + index).after($error_field);
+                            $('#login_' + index).after($error_field);
                         }
                     });
                 }
                 else {
-
                     //highlight the success fields and show the messages
                     var $success_messages = data.success_messages;
                     var $form_message = $('#form_messages');
@@ -46,8 +44,9 @@ jQuery(document).ready(function ($) {
                     $.each($success_messages, function (index, value) {
                         if (index === 'login'){
                             $form_message.html('<div class="alert alert-success" role="alert">'+value+'</div>').show();
-                            $('#login_form').remove();
-                            $form_message.append('<a type="button" class="btn btn-primary btn-lg" href="admin/index.php">Admin Panel</a>').show();
+                            // window.location.replace("homepage.php");
+                            // $('#login_form').remove();
+                            // $form_message.append('<a type="button" class="btn btn-primary btn-lg" href="admin/index.php">Admin Panel</a>').show();
                         }else{
                             $form_message.html('<div class="alert alert-danger" role="alert">'+value+'</div>').show();
                         }

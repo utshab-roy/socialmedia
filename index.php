@@ -16,16 +16,20 @@
     <div class="row">
         <div class="col-md-6 offset-md-3">
 <!--            login section-->
+            <div id="form_messages"></div>
             <form class="needs-validation" action="index.php" method="post" id="login_form">
                 <h1 class="display-3">Social Media</h1>
 <!--                <a href="../socialmedia"><img src="https://image.ibb.co/eiByzJ/logo.jpg" alt="logo" width ="500px" border="0"></a>-->
                 <h1 class="h3 mb-3 mt-3 font-weight-normal">Please sign in</h1>
 
                 <label for="login_email" class="sr-only">Email address</label>
-                <input type="email" id="login_email" name="email" class="form-control" placeholder="Email address" required="" autofocus="">
+                <input type="email" id="login_email" name="email" class="form-control" placeholder="Email address" >
 
                 <label for="login_psw" class="sr-only">Password</label>
-                <input type="password" id="login_psw" name="psw" class="form-control" placeholder="Password" required="">
+                <input type="password" id="login_psw" name="psw" class="form-control" placeholder="Password" >
+
+                <input type="hidden" name="login" id="login" value="1">
+
                 <div class="checkbox mb-3">
                     <label>
                         <input type="checkbox" value="remember-me"> Remember me
@@ -148,6 +152,6 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
-<script src="js/main.js"></script>
+<script src="js/main.js?v=<?= $timestamp = time()?>"></script>
 </body>
 </html>
