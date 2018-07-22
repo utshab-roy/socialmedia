@@ -2,6 +2,7 @@
 jQuery(document).ready(function ($) {
     var $registration_form    = $("#registration_form");
     var $login_form     = $("#login_form");
+    var $load_posts      = $("#load_posts");
 
     //login form handel begin
     $login_form.on('submit', function (event) {
@@ -44,7 +45,7 @@ jQuery(document).ready(function ($) {
                     $.each($success_messages, function (index, value) {
                         if (index === 'login'){
                             $form_message.html('<div class="alert alert-success" role="alert">'+value+'</div>').show();
-                            window.location.replace("homepage.php");
+                            // window.location.replace("homepage.php");
 
                         }else{
                             $form_message.html('<div class="alert alert-danger" role="alert">'+value+'</div>').show();
@@ -117,4 +118,39 @@ jQuery(document).ready(function ($) {
         }); // end of ajax method
     });//end of registration form
 
-});
+    //loading the page using pagination
+    $load_posts.on('click', function (event) {
+        event.preventDefault();
+        console.log('Load Posts, sending ajax request');
+
+        // var $data = new Array(3, 1, 'desc', 'id');
+        var $data ='per_page=3&page=1&order=desc&orderby=id';
+
+        $.ajax({
+            type: "GET",
+            url: "posts_ajax.php",
+            data: $data,
+            dataType: 'json',
+            beforeSend: function () {
+
+            },
+            cache: false,
+            success: function (data) {
+                // console.log(data.content);
+                // page_number = data.current_page;
+                // begin_form = page_number * per_page;
+
+                $.each(data.content, function (index, value) {
+                    console.log(index);
+                    var $post_content = '<div id="each_post">' + data.content[index] + '</div>';
+                    $('#each_post').after($post_content);
+                    // $form_message.html('<div id="each_post">' + data.content[] + '</div>').show();
+                });
+
+            }
+        });
+
+
+    });//end of load_posts method
+
+});//end of document ready function

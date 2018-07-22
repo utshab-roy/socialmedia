@@ -1,0 +1,6 @@
+#each_post{
+    background-color: lightcyan;
+    margin-bottom: 10px;
+    border: thick double #32a1ce;
+    padding: 10px;
+}

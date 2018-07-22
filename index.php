@@ -1,6 +1,6 @@
 <?php
-//session_start();
-//var_dump($_SESSION);
+session_start();
+var_dump($_SESSION);
 ?>
 <!doctype html>
 <html lang="en">
@@ -19,7 +19,19 @@
     <div class="row">
         <div class="col-md-6 offset-md-3">
 <!--            login section-->
-            <div id="form_messages" class="mt-3"></div>
+            <div id="form_messages" class="mt-3">
+                <?php
+                if(isset($_SESSION['message'])):
+                    $message = $_SESSION['message'];
+                    foreach ($message as $msg):
+//                        var_dump($message);
+                        echo '<div class="alert alert-success" role="alert">'.$msg.'</div>';
+                    endforeach;
+                    $_SESSION['message'] = null;
+//                    session_destroy();
+                endif;
+                ?>
+            </div>
             <form class="needs-validation" action="index.php" method="post" id="login_form">
                 <h1 class="display-3">Social Media</h1>
 <!--                <a href="../socialmedia"><img src="https://image.ibb.co/eiByzJ/logo.jpg" alt="logo" width ="500px" border="0"></a>-->

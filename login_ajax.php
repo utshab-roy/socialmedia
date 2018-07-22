@@ -53,7 +53,7 @@ if (isset($_GET['verification']) && (intval($_GET['verification']) == 1)){
     $code = $_GET['code'];
     $success_messages = user_account_verification($code);
     $output['success_messages'] = $success_messages;
-    echo json_encode($output);
+    header('location: index.php');
 }
 
 
