@@ -1,12 +1,12 @@
 <?php
 include 'config.php';
 
-global $conn_oop;
-$sql = "SELECT * FROM posts";
-$result = $conn_oop->query($sql);
+//global $conn_oop;
+//$sql = "SELECT * FROM posts";
+//$result = $conn_oop->query($sql);
 //
 //var_dump($result->num_rows);
-pagination();
+//pagination();
 
 ?>
 
@@ -26,33 +26,34 @@ pagination();
 <body>
 <div class="container-fluid" style="padding-left: 100px; padding-right: 100px">
     <div class="row">
-        <div class="col-md-3 text-left" style="background-color: lightgray">
-            <h1>Profile</h1>
-            <p></p>
-
-        </div>
-        <div class="col-md-6">
+        <div class="col-md-12">
             <h2>All Posts</h2>
-            <div id="post_warp" class="text-justify">
             <?php
-            $count = 3;
-            while ($row = $result->fetch_assoc()):
-                echo '<div id="each_post">';
-                echo $row['content'];
-                echo '</div>';
-                $count--;
-                if ($count == 0){
-                    break;
-                }
-            endwhile;
+            //returns the total post
+            $total = get_total_posts_count();
+            $per_page = 3;
+            $page = 1;
+            $order = 'desc';
+            $order_by = 'id';
+
+            $posts = get_post_data($page, $per_page, $order, $order_by);
+            $posts_html = get_post_data_html($posts);
+            $max_page = ceil($total/$per_page);
             ?>
+            <div id="post_box_containers" class="">
+                <div id="post_box_wrapper">
+                    <?php
+                    echo $posts_html;
+                    ?>
+                </div>
+                <?php if($total >  $per_page): ?>
+                <a data-busy="0" data-maxpage="<?php echo $max_page; ?>" data-order="<?php echo $order; ?>"
+                   data-orderby="<?php echo $order_by; ?>" data-page="<?php echo intval($page); ?>"
+                   data-perpage="<?php echo intval($per_page); ?>" data-total="<?php echo intval($total); ?>"
+                   href="#" class="post_box_load">Load More</a>
+                <?php endif; ?>
             </div>
-            <div id="load_posts">
-                <a href="index.php" class="btn btn-primary mb-5" role="button">Load More...</a>
-            </div>
-        </div>
-        <div class="col-md-3 text-right" style="background-color: lightgray">
-            <h1>Who to Follow</h1>
+
         </div>
     </div>
 </div>

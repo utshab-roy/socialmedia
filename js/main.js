@@ -1,3 +1,4 @@
+console.log('hi there');
 //fires the script after the dom ready
 jQuery(document).ready(function ($) {
     var $registration_form    = $("#registration_form");
@@ -118,39 +119,58 @@ jQuery(document).ready(function ($) {
         }); // end of ajax method
     });//end of registration form
 
-    //loading the page using pagination
-    $load_posts.on('click', function (event) {
-        event.preventDefault();
-        console.log('Load Posts, sending ajax request');
 
-        // var $data = new Array(3, 1, 'desc', 'id');
-        var $data ='per_page=3&page=1&order=desc&orderby=id';
+    //ajax pagination
+    var $post_box_containers = $('#post_box_containers');
 
-        $.ajax({
-            type: "GET",
-            url: "posts_ajax.php",
-            data: $data,
-            dataType: 'json',
-            beforeSend: function () {
+    $post_box_containers.on('click', '.post_box_load', function (e) {
+        e.preventDefault();
 
-            },
-            cache: false,
-            success: function (data) {
-                // console.log(data.content);
-                // page_number = data.current_page;
-                // begin_form = page_number * per_page;
+        var $this = $(this);
 
-                $.each(data.content, function (index, value) {
-                    console.log(index);
-                    var $post_content = '<div id="each_post">' + data.content[index] + '</div>';
-                    $('#each_post').after($post_content);
-                    // $form_message.html('<div id="each_post">' + data.content[] + '</div>').show();
-                });
+        var $page = parseInt($this.data('page'));
+        // console.log($this.data);
+        var $perpage = parseInt($this.data('perpage'));
+        var $order = $this.data('order');
+        var $orderby = $this.data('orderby');
+        var $total = parseInt($this.data('total'));
+        var $maxpage = parseInt($this.data('maxpage'));
+        var $busy = parseInt($this.data('busy'));
 
-            }
-        });
+        $page++;
+        // console.log($maxpage);
+
+        if($busy == 0){
+            $this.data('busy', 1);
+            $this.text('loading');
+            var $data ='page='+$page+'&perpage='+$perpage+'&order='+$order+'&orderby='+$orderby;
+
+            $.ajax({
+                type: "POST",
+                url: "posts_ajax.php",
+                data: $data,
+                dataType: 'json',
+                cache: false,
+                success: function (data) {
+                    console.log(data);
+
+                    $this.text('Load More');
+                    $post_box_containers.find('#post_box_wrapper').append(data);
+                    $this.data('busy', 0);
+                    $this.data('page', $page);
+
+                    if($page >= $maxpage){
+                        $this.remove();
+                    }
+
+                    //now think logically if we need to hide the read more anchor. if yes then remove it, if not then  update it's current page data
+                }
+            });
+
+        }
 
 
-    });//end of load_posts method
+        //now send ajax request
+    });
 
 });//end of document ready function

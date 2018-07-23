@@ -6,11 +6,12 @@ include 'mail_sender.php';
  * @param $password
  * @return array
  */
-function login_validation($email, $password){
-    global  $conn_oop;
+function login_validation($email, $password)
+{
+    global $conn_oop;
 
-    $success_messages  = array();
-    $error_messages  = array();
+    $success_messages = array();
+    $error_messages = array();
 
     $sql = "SELECT * FROM users WHERE email='$email' AND password=MD5('$password') AND publish=1";
     $result = $conn_oop->query($sql);
@@ -21,18 +22,17 @@ function login_validation($email, $password){
         $success_messages['login'] = 'Successfully logged in !';
 //        header('location: admin/index.php');
         return $success_messages;
-    }
-    else {
+    } else {
         $sql = "SELECT * FROM users WHERE email='$email'";
         $result = $conn_oop->query($sql);
         $row = $result->fetch_assoc();
         $publish = $row['publish'];
 
-        if ($publish == -2){
+        if ($publish == -2) {
             $error_messages['unverified'] = "Unverified account";
 
 //            $_SESSION['message'] = $error_messages;
-        }else{
+        } else {
             $error_messages['wrong'] = "Wrong email or password";
 
 //            $_SESSION['message'] = $error_messages;
@@ -42,11 +42,12 @@ function login_validation($email, $password){
 }
 
 
-function user_registration($firstname, $lastname, $email, $password){
+function user_registration($firstname, $lastname, $email, $password)
+{
     global $conn_oop;
     $timestamp = time();
 
-    $success_messages  = array();
+    $success_messages = array();
 
     //inserting data into database from register page
     $sql = "INSERT INTO users (first_name, last_name, email, password, code) VALUES ('$firstname', '$lastname', '$email', MD5('$password'), MD5('$timestamp'))";
@@ -74,14 +75,15 @@ function user_registration($firstname, $lastname, $email, $password){
  * @param $email
  * @return bool
  */
-function email_exists( $email){
-    global  $conn_oop;
+function email_exists($email)
+{
+    global $conn_oop;
 
     $sql = "SELECT email FROM users WHERE email='$email'";
     $result = $conn_oop->query($sql);
-    if ($result->num_rows == 0){
+    if ($result->num_rows == 0) {
         return false;
-    }else{
+    } else {
         return true;
     }
 }
@@ -91,21 +93,22 @@ function email_exists( $email){
  * @param $code
  * @return mixed
  */
-function user_account_verification($code){
+function user_account_verification($code)
+{
     global $conn_oop;
-    $success_messages  = array();
+    $success_messages = array();
     $sql = "SELECT * FROM users WHERE code='$code'";
     $messages = array();
     $result = $conn_oop->query($sql);
     if ($result->num_rows > 0) {
         $sql_for_validation = "UPDATE users SET publish='1', code='' WHERE code='$code'";
-        if ($conn_oop->query($sql_for_validation) === TRUE){
+        if ($conn_oop->query($sql_for_validation) === TRUE) {
             $success_messages['account_verified'] = "Account verified successfully !";
             $_SESSION['message'] = $success_messages;
 //            header('location: index.php');
             return $success_messages;
         }
-    }else{
+    } else {
         $success_messages['already_verified'] = "your account may already verified. Please try to login first.";
         $_SESSION['message'] = $success_messages;
 //        header('location: index.php');
@@ -115,46 +118,62 @@ function user_account_verification($code){
 }
 
 /**
- * this method will create the pagination for the rest of tha page
- * @param int $per_page
+ * Get posts data using multiple criteria
+ *
  * @param int $current_page
+ * @param int $per_page
  * @param string $order
  * @param string $order_by
+ *
+ * @return array
  */
-function pagination($per_page = 3, $current_page = 1, $order = 'desc', $order_by = 'id'){
+function get_post_data($current_page = 1, $per_page = 10, $order = 'desc', $order_by = 'id')
+{
+    global $conn_oop;
+
     $page_data = array();
-    global  $conn_oop;
-    $sql = "SELECT * FROM posts";
+
+    $start_form = ($current_page - 1) * $per_page;
+    $sql = "SELECT * FROM posts ORDER BY $order_by $order LIMIT $start_form, $per_page";
     $result = $conn_oop->query($sql);
-    $total_posts = $result->num_rows;
-    $page_data['total_posts'] = $total_posts;
 
-    $total_pages = ceil($total_posts / $per_page);
-    $page_data['total_page'] = $total_pages;
-
-    if ($total_pages > $current_page){// the next page is available
-
-
-        //I have to store the content of the post from the database
-        $begin_of_post = $current_page * $per_page;
-        $end_of_post = $begin_of_post + $per_page;
-        $count = 0;
-        for ($count; $count < $begin_of_post; $count++ ){
-            $row = $result->fetch_assoc();
-        }
-        for ($count; $count < $end_of_post;$count++){
-            $row = $result->fetch_assoc();
-            $page_data['content'][] =  $row['content'];
-        }
-
-            //storing the next page value
-        $current_page = $current_page + 1;
-        $page_data['current_page'] = $current_page;
+    while ($row = $result->fetch_assoc()) {
+        $page_data[] = $row;
     }
-    else{//this is the last page
-        $page_data['current_page'] = $current_page;
-    }
-//    var_dump($result->num_rows);
+
+
     return $page_data;
-}
+}//end method get_post_data
+
+/**
+ * Get total posts count
+ *
+ * @return int
+ */
+function get_total_posts_count()
+{
+    global $conn_oop;
+    $sql = "SELECT COUNT(*) AS total_post FROM posts";
+    $result = $conn_oop->query($sql);
+    $row = $result->fetch_assoc();
+    $total_posts = $row['total_post'];
+    return intval($total_posts);
+}//end method get_total_posts_count
+
+/**
+ * Html markup generator from the posts data
+ *
+ * @param array $posts
+ *
+ * @return string
+ */
+function get_post_data_html($posts = array())
+{
+    $output = '';
+    foreach ($posts as $post) {
+        $output .= '<div class="post_box">' . $post['content'] . '</div>';
+    }
+
+    return $output;
+}//end method get_post_data_html
 
