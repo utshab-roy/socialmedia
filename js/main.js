@@ -1,11 +1,8 @@
-console.log('hi there');
 //fires the script after the dom ready
 jQuery(document).ready(function ($) {
-    var $registration_form    = $("#registration_form");
-    var $login_form     = $("#login_form");
-    var $load_posts      = $("#load_posts");
 
     //login form handel begin
+    var $login_form = $("#login_form");
     $login_form.on('submit', function (event) {
         event.preventDefault();
         console.log('Login form submitted, sending ajax request');
@@ -62,6 +59,7 @@ jQuery(document).ready(function ($) {
     });//end of login form
 
     //registration form handel begin
+    var $registration_form  = $("#registration_form");
     $registration_form.on('submit', function (event) {
 
         event.preventDefault();
@@ -119,10 +117,8 @@ jQuery(document).ready(function ($) {
         }); // end of ajax method
     });//end of registration form
 
-
     //ajax pagination
     var $post_box_containers = $('#post_box_containers');
-
     $post_box_containers.on('click', '.post_box_load', function (e) {
         e.preventDefault();
 
@@ -152,7 +148,7 @@ jQuery(document).ready(function ($) {
                 dataType: 'json',
                 cache: false,
                 success: function (data) {
-                    console.log(data);
+                    // console.log(data);
 
                     $this.text('Load More');
                     $post_box_containers.find('#post_box_wrapper').append(data);
@@ -172,5 +168,47 @@ jQuery(document).ready(function ($) {
 
         //now send ajax request
     });
+
+    //add a new post
+    $post_box_containers.on('submit', '#new_post_form', function (event) {
+       event.preventDefault();
+
+       var $form = $('#new_post_form');
+       var post_content = $('#post_area').val();
+
+        //now use the jq validation , if valid send ajax request
+        $form.validate({
+            rules: {
+                post_area: {
+                    required: true,
+                    minlength: 7
+                }
+            },
+            messages: {
+                post_area: {
+                    required: "You have to write something in order to POST",
+                    minlength: jQuery.validator.format("At least {0} characters required!")// "Min-length is Seven"
+                }
+            }
+        });
+
+        //checking whether the form is valid or not
+        if ($form.valid()){
+            // console.log(post_content);
+            $.ajax({
+                type: "POST",
+                url: "posts_ajax.php",
+                data: 'new_post=' + post_content,
+                dataType: 'json',
+                cache: false,
+                success: function (data) {
+                    // console.log(data);
+                    $post_box_containers.find('#post_box_wrapper').prepend(data);
+                }
+                
+            });//end of ajax function
+        }//end of $form.valid()
+    });
+
 
 });//end of document ready function

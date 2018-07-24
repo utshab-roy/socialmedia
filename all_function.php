@@ -177,3 +177,19 @@ function get_post_data_html($posts = array())
     return $output;
 }//end method get_post_data_html
 
+function add_new_post($title, $content){
+    global $conn_oop;
+    $page_data = array();
+
+    $sql = "INSERT INTO posts (title, content) VALUES ('$title', '$content')";
+    $conn_oop->query($sql);
+
+    $new_sql = "SELECT * FROM posts ORDER BY id DESC LIMIT 1";
+    $result = $conn_oop->query($new_sql);
+    while($row = $result->fetch_assoc()){
+        $page_data[] = $row;
+    }
+    return $page_data;
+
+}//end of add_new_post method
+
