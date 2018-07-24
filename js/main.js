@@ -171,7 +171,11 @@ jQuery(document).ready(function ($) {
 
     //add a new post
     $post_box_containers.on('submit', '#new_post_form', function (event) {
+
        event.preventDefault();
+       var $this = $(this);
+
+       var $busy = parseInt($this.data('busy'));
 
        var $form = $('#new_post_form');
        var post_content = $('#post_area').val();
@@ -195,18 +199,24 @@ jQuery(document).ready(function ($) {
         //checking whether the form is valid or not
         if ($form.valid()){
             // console.log(post_content);
-            $.ajax({
-                type: "POST",
-                url: "posts_ajax.php",
-                data: 'new_post=' + post_content,
-                dataType: 'json',
-                cache: false,
-                success: function (data) {
-                    // console.log(data);
-                    $post_box_containers.find('#post_box_wrapper').prepend(data);
-                }
-                
-            });//end of ajax function
+            if($busy == 0){
+                $this.data('busy', 1);
+                $('#add_post').attr('value', 'Posting...');
+                $.ajax({
+                    type: "POST",
+                    url: "posts_ajax.php",
+                    data: 'new_post=' + post_content,
+                    dataType: 'json',
+                    cache: false,
+                    success: function (data) {
+                        console.log(data);
+                        $post_box_containers.find('#post_box_wrapper').prepend(data);
+                        $this.data('busy', 0);
+                        $('#add_post').attr('value', 'Add Post');
+                    }
+
+                });//end of ajax function
+            }
         }//end of $form.valid()
     });
 

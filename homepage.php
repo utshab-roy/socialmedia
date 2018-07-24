@@ -35,7 +35,7 @@ include 'config.php';
             ?>
             <div id="post_box_containers" class="mt-3">
                 <div id="new_post_wrapper">
-                    <form id="new_post_form" action="post">
+                    <form id="new_post_form" action="post" data-busy="0">
                         <div class="form-group">
                             <label for="post_area"><h4>What's on your mind ?</h4></label>
                             <textarea class="form-control" id="post_area" name="post_area" rows="3"></textarea>
