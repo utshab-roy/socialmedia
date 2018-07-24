@@ -143,7 +143,7 @@ jQuery(document).ready(function ($) {
 
             $.ajax({
                 type: "POST",
-                url: "posts_ajax.php",
+                url: "pagination_ajax.php",
                 data: $data,
                 dataType: 'json',
                 cache: false,
@@ -181,23 +181,23 @@ jQuery(document).ready(function ($) {
        var post_content = $('#post_area').val();
 
         //now use the jq validation , if valid send ajax request
-        $form.validate({
-            rules: {
-                post_area: {
-                    required: true,
-                    minlength: 7
-                }
-            },
-            messages: {
-                post_area: {
-                    required: "You have to write something in order to POST",
-                    minlength: jQuery.validator.format("At least {0} characters required!")// "Min-length is Seven"
-                }
-            }
-        });
+        // $form.validate({
+        //     rules: {
+        //         post_area: {
+        //             required: true,
+        //             minlength: 7
+        //         }
+        //     },
+        //     messages: {
+        //         post_area: {
+        //             required: "You have to write something in order to POST",
+        //             minlength: jQuery.validator.format("At least {0} characters required!")// "Min-length is Seven"
+        //         }
+        //     }
+        // });
 
         //checking whether the form is valid or not
-        if ($form.valid()){
+        // if ($form.valid()){
             // console.log(post_content);
             if($busy == 0){
                 $this.data('busy', 1);
@@ -209,15 +209,22 @@ jQuery(document).ready(function ($) {
                     dataType: 'json',
                     cache: false,
                     success: function (data) {
-                        console.log(data);
-                        $post_box_containers.find('#post_box_wrapper').prepend(data);
+                        // console.log(data);
+                        if (!data.trim()) {
+                            // is empty or whitespace
+                            $('#form_message').html('<div style="color: red; font-size: 20px;">Nothing to post...</div>').show();
+
+                        }else {
+                            $post_box_containers.find('#post_box_wrapper').prepend(data);
+                            $('#form_message').hide();
+                        }
                         $this.data('busy', 0);
                         $('#add_post').attr('value', 'Add Post');
                     }
 
                 });//end of ajax function
             }
-        }//end of $form.valid()
+        // }//end of $form.valid()
     });
 
 

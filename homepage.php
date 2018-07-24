@@ -39,8 +39,10 @@ include 'config.php';
                         <div class="form-group">
                             <label for="post_area"><h4>What's on your mind ?</h4></label>
                             <textarea class="form-control" id="post_area" name="post_area" rows="3"></textarea>
+                            <div id="form_message"></div>
                         </div>
                         <input type="submit" class="btn btn-primary mb-3" id="add_post" name="add_post" value="Add Post" />
+
                     </form>
                 </div>
                 <div id="post_box_wrapper">
