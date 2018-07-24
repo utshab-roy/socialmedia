@@ -5,6 +5,13 @@
     padding: 10px;
 }
 
+#post_box_containers .post_box:hover{
+    background-color: #e1e1e1;
+    margin-bottom: 10px;
+    border: thick double #e1e1e1;
+    padding: 10px;
+}
+
 h2{
     font-family: "Comic Sans MS";
     margin-bottom: 50px;

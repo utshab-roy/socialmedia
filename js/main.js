@@ -1,5 +1,7 @@
 //fires the script after the dom ready
 jQuery(document).ready(function ($) {
+    //focus cursor  on the text-area
+    $("textarea#post_area").focus();
 
     //login form handel begin
     var $login_form = $("#login_form");
@@ -213,10 +215,19 @@ jQuery(document).ready(function ($) {
                         if (!data.trim()) {
                             // is empty or whitespace
                             $('#form_message').html('<div style="color: red; font-size: 20px;">Nothing to post...</div>').show();
-
-                        }else {
+                        }else if(data.length < 7){
+                            // charter is less then 7
+                            $('#form_message').html('<div style="color: red; font-size: 20px;">At least seven charter required...</div>').show();
+                        }
+                        else {
+                            console.log('Post added for prepand');
                             $post_box_containers.find('#post_box_wrapper').prepend(data);
+
+                            //removing the php error message after successfully posting
                             $('#form_message').hide();
+
+                            //removing the text-area after successfully posting
+                            $('textarea#post_area').val("");
                         }
                         $this.data('busy', 0);
                         $('#add_post').attr('value', 'Add Post');

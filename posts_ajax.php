@@ -8,6 +8,12 @@ if (empty($new_post)){
     echo json_encode($new_post);
     die();
 }
+
+elseif (intval(strlen($new_post)) < 7){
+    echo json_encode($new_post);
+    die();
+}
+
 elseif (isset($_POST['new_post']) && (!empty($new_post))){
     //    echo json_encode($new_post);
     $post_array = add_new_post('Default Title',$new_post);
