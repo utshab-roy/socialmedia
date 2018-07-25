@@ -2,14 +2,14 @@
     background-color: lightcyan;
     margin-bottom: 10px;
     border: thick double #32a1ce;
-    padding: 10px;
+    padding: 15px;
 }
 
 #post_box_containers .post_box:hover{
     background-color: #e1e1e1;
     margin-bottom: 10px;
     border: thick double #e1e1e1;
-    padding: 10px;
+    padding: 15px;
 }
 
 h2{

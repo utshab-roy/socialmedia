@@ -171,7 +171,7 @@ function get_post_data_html($posts = array())
 {
     $output = '';
     foreach ($posts as $post) {
-        $output .= '<div class="post_box" data-toggle="modal" data-target="#post_modal" id="post_box_'. $post['id'] . '">' . $post['content'] . '</div>';
+        $output .= '<div class="post_box" data-postid="'. $post['id'] . '"><p class="post_box_copy">' . $post['content'] . '</p><a type="button" class="btn btn-danger btn-sm float-right delete_post">Delete</a><a type="button" class="btn btn-primary btn-sm float-right edit_post">Edit</a></div>';
     }
 
     return $output;
@@ -192,4 +192,27 @@ function add_new_post($title, $content){
     return $page_data;
 
 }//end of add_new_post method
+
+
+/**
+ * this method deletes the post according to the id
+ * @param $id
+ * @return array
+ */
+
+function delete_post($id){
+    global $conn_oop;
+
+    $success_messages = array();
+    $error_messages = array();
+
+    $sql = "DELETE FROM posts WHERE id=$id";
+    if ($conn_oop->query($sql) === TRUE) {
+        $success_messages['post_deleted'] = 'Post deleted successfully !';
+        return $success_messages;
+    }else{
+        $error_messages['database_err'] = $conn_oop->error;
+        return $error_messages;
+    }
+}
 

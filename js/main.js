@@ -143,6 +143,7 @@ jQuery(document).ready(function ($) {
             $this.text('loading');
             var $data ='page='+$page+'&perpage='+$perpage+'&order='+$order+'&orderby='+$orderby;
 
+            //now send ajax request
             $.ajax({
                 type: "POST",
                 url: "pagination_ajax.php",
@@ -157,18 +158,15 @@ jQuery(document).ready(function ($) {
                     $this.data('busy', 0);
                     $this.data('page', $page);
 
+                    //now think logically if we need to hide the read more anchor. if yes then remove it, if not then  update it's current page data
                     if($page >= $maxpage){
                         $this.remove();
                     }
 
-                    //now think logically if we need to hide the read more anchor. if yes then remove it, if not then  update it's current page data
                 }
             });
-
         }
 
-
-        //now send ajax request
     });//end of pagination
 
     //add a new post
@@ -237,12 +235,81 @@ jQuery(document).ready(function ($) {
         // }//end of $form.valid()
     });//end of new post
 
-    var $post_box = $('.post_box');
-    $post_box.on('click', function () {
-        $this = $(this);
-        console.log($this[0].innerHTML);
-        $('#content_modal').html($this[0].innerHTML);
+    //edit the post
+    var $post_box_wrapper = $('#post_box_wrapper');
+    $post_box_wrapper.on('click', '.edit_post', function (e) {
+    e.preventDefault();
+
+    console.log('edit button clicked');
+
+    var $this = $(this);
+    var $post_id = $this.data('postid');
+    var $parent = $this.parent('.post_box');
+    var $content = $parent.find('.post_box_copy');
+
+    console.log($content);
+
+    var $form = $('<form action="#" method="post"><textarea name="content">'+$content.text()+'</textarea><input type="submit" name="submit" value="Submit" class="btn btn-primary" /></form>');
+    $form.insertAfter($content);
+    $content.hide();
+    $this.hide();
+
+
+    $form.on('submit', function (e) {
+
     });
+
+        //getting the class of the parent div of the clicked button
+        //var $post_box = $($this.parent('.post_box'));
+
+        // $post_box.hide();//hide only that box on click edit
+        // console.log($post_box);
+        //turn to inline mode
+        /*$.fn.editable.defaults.mode = 'popup';
+        $post_box.editable({
+            url: 'update_post_ajax.php',
+            type: 'textarea',
+            title: 'Edit Post',
+            placement: 'top',
+            value: $post_box[0].innerText,
+            success: function(response, newValue) {
+                userModel.set('username', newValue); //update backbone model
+            }
+        });*/
+
+    });//end of edit post method
+
+    //delete post method
+    $post_box_wrapper.on('click', '.delete_post', function (e) {
+        e.preventDefault();
+        var $this = $(this);
+
+        //getting the class of the parent div of the clicked button
+        var $post_box = $($this.parent('.post_box'));
+        // getting the id of the clicked post
+        var $post_id = $post_box[0].id;
+
+        //ajax method beginning for deleting the post
+        $.ajax({
+            type: "POST",
+            url: "delete_post_ajax.php",
+            data: 'delete_post_id=' + $post_id,
+            dataType: 'json',
+            cache: false,
+            success: function (data) {
+                console.log(data);
+                if (data.validation == 0) {
+                    var $validation_messages = data.validation_messages;
+                    $.each($validation_messages, function (index, value) {
+                        $('#form_message').html('<div style="color: red; font-size: 20px;">'+ value +'</div>').show();
+                    });
+                }else{
+                    $post_box.remove();//remove the post_box from the page
+                }
+            }
+        });//end of ajax method
+
+    });//end of delete post method
 
 
 });//end of document ready function
