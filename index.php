@@ -54,7 +54,7 @@ var_dump($_SESSION);
                 <p class="mt-3">Still not a member ? Please Sign Up</p>
 
                 <!-- Button trigger modal -->
-                <button class="btn btn-lg btn-outline-primary btn-block" type="button" data-toggle="modal" data-target="#exampleModalCenter">Sign up</button>
+                <button class="btn btn-lg btn-outline-primary btn-block" type="button" data-toggle="modal" data-target="#signup_modal">Sign up</button>
                 <p class="mt-5 mb-3 text-muted">© 2017-2018</p>
             </form>
 <!--            end of sign in section-->
@@ -64,11 +64,11 @@ var_dump($_SESSION);
 
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="signup_modal" tabindex="-1" role="dialog" aria-labelledby="signup_modalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="exampleModalCenterTitle">Sign Up</h4>
+                <h4 class="modal-title" id="signup_modalTitle">Sign Up</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

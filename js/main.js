@@ -169,7 +169,7 @@ jQuery(document).ready(function ($) {
 
 
         //now send ajax request
-    });
+    });//end of pagination
 
     //add a new post
     $post_box_containers.on('submit', '#new_post_form', function (event) {
@@ -211,16 +211,15 @@ jQuery(document).ready(function ($) {
                     dataType: 'json',
                     cache: false,
                     success: function (data) {
-                        // console.log(data);
-                        if (!data.trim()) {
-                            // is empty or whitespace
-                            $('#form_message').html('<div style="color: red; font-size: 20px;">Nothing to post...</div>').show();
-                        }else if(data.length < 7){
-                            // charter is less then 7
-                            $('#form_message').html('<div style="color: red; font-size: 20px;">At least seven charter required...</div>').show();
-                        }
-                        else {
-                            console.log('Post added for prepand');
+                        // console.log(data.validation);
+                        if (data.validation == 0) {
+                            var $validation_messages = data.validation_messages;
+                            $.each($validation_messages, function (index, value) {
+                                $('#form_message').html('<div style="color: red; font-size: 20px;">'+ value +'</div>').show();
+                            });
+
+                        }else {
+                            //adding post on the top using prepend method
                             $post_box_containers.find('#post_box_wrapper').prepend(data);
 
                             //removing the php error message after successfully posting
@@ -234,8 +233,15 @@ jQuery(document).ready(function ($) {
                     }
 
                 });//end of ajax function
-            }
+            }// end of if(busy == 0)
         // }//end of $form.valid()
+    });//end of new post
+
+    var $post_box = $('.post_box');
+    $post_box.on('click', function () {
+        $this = $(this);
+        console.log($this[0].innerHTML);
+        $('#content_modal').html($this[0].innerHTML);
     });
 
 

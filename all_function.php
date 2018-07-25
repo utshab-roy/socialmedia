@@ -171,7 +171,7 @@ function get_post_data_html($posts = array())
 {
     $output = '';
     foreach ($posts as $post) {
-        $output .= '<div class="post_box">' . $post['content'] . '</div>';
+        $output .= '<div class="post_box" data-toggle="modal" data-target="#post_modal" id="post_box_'. $post['id'] . '">' . $post['content'] . '</div>';
     }
 
     return $output;

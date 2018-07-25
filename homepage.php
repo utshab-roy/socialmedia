@@ -17,7 +17,7 @@ include 'config.php';
     <title>Homepage</title>
 </head>
 <body>
-<div class="container-fluid" style="padding-left: 100px; padding-right: 100px">
+<div class="container" style="padding-left: 100px; padding-right: 100px">
     <div class="row">
         <div class="col-md-12">
             <h2>All Posts</h2>
@@ -58,6 +58,33 @@ include 'config.php';
                 <?php endif; ?>
             </div>
 
+<!--            ********************************************-->
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#post_modal">
+                Launch demo modal
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="post_modal" tabindex="-1" role="dialog" aria-labelledby="post_modalTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="post_modalTitle">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="content_modal"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<!--            ********************************************-->
         </div>
     </div>
 </div>
