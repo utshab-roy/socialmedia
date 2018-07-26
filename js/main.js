@@ -243,21 +243,51 @@ jQuery(document).ready(function ($) {
     console.log('edit button clicked');
 
     var $this = $(this);
-    var $post_id = $this.data('postid');
+
     var $parent = $this.parent('.post_box');
     var $content = $parent.find('.post_box_copy');
+    var $post_id = $parent.data('postid');
+    //content of the .post_box_copy
+    var $text_content = $content.text();
+    // console.log($post_id);
 
-    console.log($content);
 
-    var $form = $('<form action="#" method="post"><textarea name="content">'+$content.text()+'</textarea><input type="submit" name="submit" value="Submit" class="btn btn-primary" /></form>');
+    var $form = $('<form action="#" method="post"><input type="hidden" name="post_id" value="'+$post_id+'" /><textarea rows="3" class="form-control content" name="content">'+$text_content+'</textarea><input type="submit" name="submit" value="Submit" class="btn btn-primary" /></form>');
+
     $form.insertAfter($content);
     $content.hide();
     $this.hide();
-
+    $text_content_update = '';
 
     $form.on('submit', function (e) {
+        e.preventDefault();
+        // var $text_content_update = $form.find('.content').val();
 
-    });
+        $.ajax({
+            type: "POST",
+            url: "update_post_ajax.php",
+            //data: 'post_id='+$post_id+'&updated_post='+$text_content_update,
+            data: $form.serialize(),
+            dataType: 'json',
+            cache: false,
+            success: function (data) {
+                 // console.log(data);
+                if (data.validation == 0) {
+                    var $validation_messages = data.validation_messages;
+                    $.each($validation_messages, function (index, value) {
+                        $('#form_message').html('<div style="color: red; font-size: 20px;">'+ value +'</div>').show();
+                    });
+
+                }else {
+                    $form.remove();
+                    $content[0].innerText = data;
+                    // console.log($content[0].innerText);
+                    $content.show();
+                    $this.show();
+                }
+            }//end of success message
+        });//end of ajax function
+    });//end of form
 
         //getting the class of the parent div of the clicked button
         //var $post_box = $($this.parent('.post_box'));

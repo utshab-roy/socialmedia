@@ -216,3 +216,26 @@ function delete_post($id){
     }
 }
 
+/**
+ * this method update the post from the posts table and returns the success or error message
+ * @param $post_id
+ * @param $updated_post
+ * @return array
+ */
+
+function update_post($post_id, $updated_post){
+    global $conn_oop;
+
+    $success_messages = array();
+    $error_messages = array();
+
+    $sql = "UPDATE posts SET content='$updated_post' WHERE id='$post_id'";
+    if ($conn_oop->query($sql) === TRUE) {
+        $success_messages['post_updated'] = 'Post updated successfully !';
+        return $success_messages;
+    }else{
+        $error_messages['database_err'] = $conn_oop->error;
+        return $error_messages;
+    }
+}
+
