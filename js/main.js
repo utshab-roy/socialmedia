@@ -238,86 +238,66 @@ jQuery(document).ready(function ($) {
     //edit the post
     var $post_box_wrapper = $('#post_box_wrapper');
     $post_box_wrapper.on('click', '.edit_post', function (e) {
-    e.preventDefault();
 
-    console.log('edit button clicked');
-
-    var $this = $(this);
-
-    var $parent = $this.parent('.post_box');
-    var $content = $parent.find('.post_box_copy');
-    var $post_id = $parent.data('postid');
-    //content of the .post_box_copy
-    var $text_content = $content.text();
-    // console.log($post_id);
-
-
-    var $form = $('<form action="#" method="post"><input type="hidden" name="post_id" value="'+$post_id+'" /><textarea rows="3" class="form-control content" name="content">'+$text_content+'</textarea><input type="submit" name="submit" value="Submit" class="btn btn-primary" /></form>');
-
-    $form.insertAfter($content);
-    $content.hide();
-    $this.hide();
-    $text_content_update = '';
-
-    $form.on('submit', function (e) {
         e.preventDefault();
-        // var $text_content_update = $form.find('.content').val();
 
-        $.ajax({
-            type: "POST",
-            url: "update_post_ajax.php",
-            //data: 'post_id='+$post_id+'&updated_post='+$text_content_update,
-            data: $form.serialize(),
-            dataType: 'json',
-            cache: false,
-            success: function (data) {
-                 // console.log(data);
-                if (data.validation == 0) {
-                    var $validation_messages = data.validation_messages;
-                    $.each($validation_messages, function (index, value) {
-                        $('#form_message').html('<div style="color: red; font-size: 20px;">'+ value +'</div>').show();
-                    });
+        console.log('edit button clicked');
 
-                }else {
-                    $form.remove();
-                    $content[0].innerText = data;
-                    // console.log($content[0].innerText);
-                    $content.show();
-                    $this.show();
-                }
-            }//end of success message
-        });//end of ajax function
-    });//end of form
+        var $this = $(this);
 
-        //getting the class of the parent div of the clicked button
-        //var $post_box = $($this.parent('.post_box'));
+        var $parent = $this.parent('.post_box');
+        var $content = $parent.find('.post_box_copy');
+        var $post_id = $parent.data('postid');
+        //content of the .post_box_copy
+        var $text_content = $content.text();
+        // console.log($post_id);
 
-        // $post_box.hide();//hide only that box on click edit
-        // console.log($post_box);
-        //turn to inline mode
-        /*$.fn.editable.defaults.mode = 'popup';
-        $post_box.editable({
-            url: 'update_post_ajax.php',
-            type: 'textarea',
-            title: 'Edit Post',
-            placement: 'top',
-            value: $post_box[0].innerText,
-            success: function(response, newValue) {
-                userModel.set('username', newValue); //update backbone model
-            }
-        });*/
+        var $form = $('<form action="#" method="post"><input type="hidden" name="post_id" value="'+$post_id+'" /><textarea rows="3" class="form-control content" name="content">'+$text_content+'</textarea><input type="submit" name="submit" value="Submit" class="btn btn-primary" /></form>');
+
+        $form.insertAfter($content);
+        $content.hide();
+        $this.hide();
+        $text_content_update = '';
+
+        $form.on('submit', function (e) {
+            e.preventDefault();
+            // var $text_content_update = $form.find('.content').val();
+
+            $.ajax({
+                type: "POST",
+                url: "update_post_ajax.php",
+                //data: 'post_id='+$post_id+'&updated_post='+$text_content_update,
+                data: $form.serialize(),
+                dataType: 'json',
+                cache: false,
+                success: function (data) {
+                     // console.log(data);
+                    if (data.validation == 0) {
+                        var $validation_messages = data.validation_messages;
+                        $.each($validation_messages, function (index, value) {
+                            $('#form_message').html('<div style="color: red; font-size: 20px;">'+ value +'</div>').show();
+                        });
+
+                    }else {
+                        $form.remove();
+                        $content[0].innerText = data;
+                        // console.log($content[0].innerText);
+                        $content.show();
+                        $this.show();
+                    }
+                }//end of success message
+            });//end of ajax function
+        });//end of form
 
     });//end of edit post method
 
-    //delete post method
+    //delete the post method
     $post_box_wrapper.on('click', '.delete_post', function (e) {
         e.preventDefault();
         var $this = $(this);
-
-        //getting the class of the parent div of the clicked button
-        var $post_box = $($this.parent('.post_box'));
-        // getting the id of the clicked post
-        var $post_id = $post_box[0].id;
+        var $parent = $this.parent('.post_box');
+        // console.log($parent);
+        var $post_id = $parent.data('postid');
 
         //ajax method beginning for deleting the post
         $.ajax({
@@ -334,12 +314,12 @@ jQuery(document).ready(function ($) {
                         $('#form_message').html('<div style="color: red; font-size: 20px;">'+ value +'</div>').show();
                     });
                 }else{
-                    $post_box.remove();//remove the post_box from the page
+                    $parent.remove();//removing the
                 }
-            }
+            }//end of success
         });//end of ajax method
-
     });//end of delete post method
+
 
 
 });//end of document ready function
