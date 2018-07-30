@@ -326,6 +326,107 @@ jQuery(document).ready(function ($) {
 
 
 
+    var $edit_profile = $('#edit_profile');
+
+    $edit_profile.on('click', function (e) {
+        e.preventDefault();
+        var $this = $(this);
+        console.log('Profile edit button clicked');
+
+        var user_id = $this.data('user_id');
+
+        $this.hide();
+        $user_info = $('.user_info');
+
+        $user_info.hide();
+
+        var $form =$(
+            '<form action="#" method="post" >' +
+                '<div class="form-group">' +
+                    '<label for="first_name">First Name:</label>' +
+                    '<input type="text" class="form-control" name="first_name" placeholder="First name...">' +
+                '</div>' +
+                '<div class="form-group">' +
+                    '<label for="last_name">Last Name:</label>' +
+                    '<input type="text" class="form-control" name="last_name" placeholder="last name...">' +
+                '</div>' +
+                '<div class="form-group">' +
+                    '<label for="email">Email:</label>' +
+                    '<input type="email" class="form-control" name="email" aria-describedby="emailHelp" placeholder="Enter email">\n' +
+                '</div>' +
+                '<div class="form-group">' +
+                    '<label for="location">Location:</label>' +
+                    '<input type="text" class="form-control" name="location" placeholder="Give location...">' +
+                '</div>' +
+                '<div class="form-group">' +
+                    '<label for="birth_date">Date of Birth:</label>' +
+                    '<input type="text" class="form-control" name="birth_date" placeholder="Date of birth...">' +
+                '</div>' +
+                '<div class="form-group">' +
+                    '<label for="website">Website</label>' +
+                    '<input type="text" class="form-control" name="website" placeholder="link of website...">' +
+                '</div>' +
+                '<input type="hidden" name="user_id" value="'+ user_id +'" >'+
+                '<button type="submit" class="btn btn-primary">Update</button>' +
+            '</form>' +
+
+            '');
+
+        $('.edit_info').append($form);
+
+        $form.on('submit', function (e) {
+            e.preventDefault();
+            // var $text_content_update = $form.find('.content').val();
+            var data = $form.serialize();
+            // console.log(data);
+
+            $.ajax({
+                type: "POST",
+                url: "user_profile_ajax.php",
+                //data: 'post_id='+$post_id+'&updated_post='+$text_content_update,
+                data: $form.serialize(),
+                dataType: 'json',
+                cache: false,
+                success: function (data) {
+                    // console.log(data);
+                    if (data.validation == 0) {
+                        var $validation_messages = data.validation_messages;
+                        $.each($validation_messages, function (index, value) {
+                            $('#form_message').html('<div style="color: red; font-size: 20px;">'+ value +'</div>').show();
+                        });
+
+                    }else {
+                        $form.remove();
+                        $this.show();
+
+                        $user_info.find('p').remove();
+                        // $user_info.append('<p>'+ data['first_name']+ ' ' + data['last_name']+'</p>');
+
+                        // $user_info.each();
+                        $.each( data, function( key, value ) {
+                            if( String(key) === 'info'){
+                                console.log($.parseJSON(value));
+                                // $.each(value, function (key, value) {
+                                //     $user_info.append('<p>' + key +': '+ value + '</p>');
+                                // });
+                                // console.log($.parseJSON(value));
+                            }
+                            $user_info.append('<p>' + value + '</p>');
+                        });
+
+
+                        $user_info.show();
+                    }
+                }//end of success message
+            });//end of ajax function
+        });//end of form
+
+        // $('.user_info').show();
+    });//end of edit profile
+
+
+
+
 
 
 });//end of document ready function

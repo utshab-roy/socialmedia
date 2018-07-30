@@ -51,7 +51,7 @@ include 'config.php';
 
             $posts = get_post_data($page, $per_page, $order, $order_by);
             $posts_html = get_post_data_html($posts);
-            $max_page = ceil($total/$per_page);
+            $max_page = intval(ceil($total/$per_page));
             ?>
             <div id="post_box_containers" class="mt-3">
                 <div id="new_post_wrapper">

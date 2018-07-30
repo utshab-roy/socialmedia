@@ -39,6 +39,44 @@ include 'config.php';
 <!--        This section is for user data-->
         <div class="col-4">
             User data and information
+            <a type="button" data-user_id="<?=$_SESSION['user_id'] ?>" id="edit_profile" class="btn btn-primary float-right btn-sm">Edit Profile</a>
+            <hr/>
+            <?php
+            //user_id as author_id
+            $author_id = $_SESSION['user_id'];
+            $row = get_all_user_data($author_id);
+            ?>
+            <div class="user_info">
+
+                <p><?=$row['first_name'].' '. $row['last_name'];?></p>
+                <p><?=$row['email'];?></p>
+
+
+                <?php
+                //if info column is not null then execute
+                if (!($row['info'] === '')):
+                    $address = json_decode($row['info']);
+                    foreach ($address as $key => $val):
+                        if ($val === "") continue; ?>
+                        <div class="row">
+                            <div class="col-4">
+                                <p><?php echo $key; ?></p>
+                            </div>
+                            <div class="col-8">
+                                <p><?php echo $val; ?></p>
+                            </div>
+                        </div>
+                        <?php
+                    endforeach;
+                endif;
+                ?>
+
+            </div>  <!--end of user info div-->
+
+            <div class="edit_info">
+
+            </div>
+
         </div>
 <!--        This section is for user post created by the user-->
         <div class="col-8">
@@ -46,7 +84,7 @@ include 'config.php';
                 <h2>All Posts</h2>
             </div>
             <?php
-            $author_id = $_SESSION['user_id'];
+
             //returns the total post
             $per_page = 3;
             $page = 1;
@@ -56,8 +94,7 @@ include 'config.php';
             $total = get_total_posts_count_of_user($author_id);
             $posts = get_post_data_of_user($page, $per_page, $order, $order_by, $author_id);
             $posts_html = get_post_data_html($posts);
-            $max_page = ceil($total/$per_page);
-            var_dump($max_page);
+            $max_page = intval(ceil($total/$per_page));
 
             ?>
             <div id="post_box_containers" class="mt-3">

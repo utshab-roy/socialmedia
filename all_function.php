@@ -325,4 +325,45 @@ function get_post_data_of_user($current_page = 1, $per_page = 10, $order = 'desc
     return $page_data;
 }//end method get_post_data
 
+/**
+ * getting all the data of the user by the user_id
+ *
+ * @param $user_id
+ * @return array
+ */
+function get_all_user_data($user_id){
+    global $conn_oop;
+    $sql = "SELECT * FROM users WHERE id=$user_id";
+    $result = $conn_oop->query($sql);
+    $row = $result->fetch_assoc();
+    return $row;
+}//end of user_profile method
+
+
+
+function update_user_info($first_name, $last_name, $email, $info, $user_id){
+    global $conn_oop;
+
+    $success_messages = array();
+    $error_messages = array();
+
+    $sql = "UPDATE users SET first_name='$first_name', last_name='$last_name', email='$email', info='$info' WHERE id='$user_id'";
+    if ($conn_oop->query($sql) === TRUE) {
+        $success_messages['post_updated'] = 'Post updated successfully !';
+        return $success_messages;
+    }else{
+        $error_messages['database_err'] = $conn_oop->error;
+        return $error_messages;
+    }
+}
+
+
+function get_all_user_info($user_id){
+    global $conn_oop;
+    $sql = "SELECT CONCAT(first_name,' ',last_name), email, info FROM users WHERE id=$user_id";
+    $result = $conn_oop->query($sql);
+    $row = $result->fetch_assoc();
+    return $row;
+}//end of user_profile method
+
 
