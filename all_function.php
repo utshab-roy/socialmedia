@@ -1,5 +1,4 @@
 <?php
-//session_start();
 include 'mail_sender.php';
 /**this method will check the validation for login
  * @param $email
@@ -18,7 +17,9 @@ function login_validation($email, $password)
     if ($result->num_rows > 0) {
         $_SESSION['logged_in'] = true;
         $row = $result->fetch_assoc();
-        $_SESSION['id'] = $row['id'];
+        $_SESSION['user_id'] = $row['id'];
+        $_SESSION['name'] = $row['first_name'];
+
         $success_messages['login'] = 'Successfully logged in !';
 //        header('location: admin/index.php');
         return $success_messages;
@@ -170,18 +171,25 @@ function get_total_posts_count()
 function get_post_data_html($posts = array())
 {
     $output = '';
+
     foreach ($posts as $post) {
-        $output .= '<div class="post_box" data-postid="'. $post['id'] . '"><p class="post_box_copy">' . $post['content'] . '</p><a type="button" class="btn btn-danger btn-sm float-right delete_post">Delete</a><a type="button" class="btn btn-primary btn-sm float-right edit_post">Edit</a></div>';
+        $author = get_author_name_by_posts_id($post['id']);
+        if ($_SESSION['user_id'] == $post['author_id']){
+            $output .= '<div class="post_box" data-postid="'. $post['id'] . '"><p><b><a href="user_profile.php">'.$author.'</a></b></p><p class="post_box_copy">' . $post['content'] . '</p><a type="button" class="btn btn-danger btn-sm float-right delete_post">Delete</a><a type="button" class="btn btn-primary btn-sm float-right edit_post">Edit</a></div>';
+        }else{
+            $output .= '<div class="post_box" data-postid="'. $post['id'] . '"><p><b>'.$author.'</b></p><p class="post_box_copy">' . $post['content'] . '</p></div>';
+        }
+//        $output .= '<div class="post_box" data-postid="'. $post['id'] . '"><p class="post_box_copy">' . $post['content'] . '</p><a type="button" class="btn btn-danger btn-sm float-right delete_post">Delete</a><a type="button" class="btn btn-primary btn-sm float-right edit_post">Edit</a></div>';
     }
 
     return $output;
 }//end method get_post_data_html
 
-function add_new_post($title, $content){
+function add_new_post($title, $content, $user_id){
     global $conn_oop;
     $page_data = array();
 
-    $sql = "INSERT INTO posts (title, content) VALUES ('$title', '$content')";
+    $sql = "INSERT INTO posts (title, content, author_id) VALUES ('$title', '$content', '$user_id')";
     $conn_oop->query($sql);
 
     $new_sql = "SELECT * FROM posts ORDER BY id DESC LIMIT 1";
@@ -238,4 +246,83 @@ function update_post($post_id, $updated_post){
         return $error_messages;
     }
 }
+
+
+/**
+ * returns the author name of the post according to the posts id
+ * @param $post_id
+ * @return string
+ */
+function get_author_name_by_posts_id($post_id){
+    //get author name by posts['id']
+    global $conn_oop;
+
+    $sql = "SELECT users.first_name, users.last_name FROM users LEFT JOIN posts ON posts.author_id=users.id WHERE posts.id='$post_id'";
+    $result = $conn_oop->query($sql);
+
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            $name =  $row['first_name'] .' '. $row['last_name'];
+            return $name;
+        }
+    }
+    return $conn_oop->error;
+}
+
+
+//get all the post by logged in user
+function all_posts_by_user($user_id){
+    global $conn_oop;
+
+    $sql = "SELECT posts.content, posts.author_id FROM posts LEFT JOIN users ON posts.author_id=users.id WHERE users.id='$user_id' ORDER BY posts.content DESC";
+//    $sql = "SELECT posts.content, posts.author_id FROM posts LEFT JOIN users ON posts.author_id=users.id ORDER BY DESC";
+
+    $result = $conn_oop->query($sql);
+    while($row = $result->fetch_assoc()){
+        return $row['content'];
+    }
+
+
+    if ($conn_oop->query($sql) === TRUE) {
+        $success_messages['post_updated'] = 'Post updated successfully !';
+        return $success_messages;
+    }else{
+        $error_messages['database_err'] = $conn_oop->error;
+        return $error_messages;
+    }
+}
+
+
+/**
+ * Get total posts count
+ *
+ * @return int
+ */
+function get_total_posts_count_of_user($author_id)
+{
+    global $conn_oop;
+    $sql = "SELECT COUNT(*) AS total_post FROM posts WHERE posts.author_id='$author_id'";
+    $result = $conn_oop->query($sql);
+    $row = $result->fetch_assoc();
+    $total_posts = $row['total_post'];
+    return intval($total_posts);
+}//end method get_total_posts_count
+
+
+function get_post_data_of_user($current_page = 1, $per_page = 10, $order = 'desc', $order_by = 'id', $author_id)
+{
+    global $conn_oop;
+
+    $page_data = array();
+
+    $start_form = ($current_page - 1) * $per_page;
+    $sql = "SELECT * FROM posts WHERE posts.author_id=$author_id ORDER BY $order_by $order LIMIT $start_form, $per_page";
+    $result = $conn_oop->query($sql);
+
+    while ($row = $result->fetch_assoc()) {
+        $page_data[] = $row;
+    }
+    return $page_data;
+}//end method get_post_data
+
 

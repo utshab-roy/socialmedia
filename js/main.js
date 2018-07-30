@@ -45,7 +45,7 @@ jQuery(document).ready(function ($) {
                     $.each($success_messages, function (index, value) {
                         if (index === 'login'){
                             $form_message.html('<div class="alert alert-success" role="alert">'+value+'</div>').show();
-                            // window.location.replace("homepage.php");
+                            window.location.replace("homepage.php");
 
                         }else{
                             $form_message.html('<div class="alert alert-danger" role="alert">'+value+'</div>').show();
@@ -134,6 +134,9 @@ jQuery(document).ready(function ($) {
         var $total = parseInt($this.data('total'));
         var $maxpage = parseInt($this.data('maxpage'));
         var $busy = parseInt($this.data('busy'));
+        var $pagename = $this.data('pagename');
+        var $author_id = $this.data('author_id');
+        console.log($page);
 
         $page++;
         // console.log($maxpage);
@@ -141,7 +144,8 @@ jQuery(document).ready(function ($) {
         if($busy == 0){
             $this.data('busy', 1);
             $this.text('loading');
-            var $data ='page='+$page+'&perpage='+$perpage+'&order='+$order+'&orderby='+$orderby;
+            var $data ='page='+$page+'&perpage='+$perpage+'&order='+$order+'&orderby='+$orderby+'&pagename='+$pagename+'&author_id='+$author_id;
+            console.log($data);
 
             //now send ajax request
             $.ajax({
@@ -319,6 +323,8 @@ jQuery(document).ready(function ($) {
             }//end of success
         });//end of ajax method
     });//end of delete post method
+
+
 
 
 

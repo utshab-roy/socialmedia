@@ -1,11 +1,11 @@
-#post_box_containers .post_box{
+.post_box{
     background-color: lightcyan;
     margin-bottom: 10px;
     border: thick double #32a1ce;
     padding: 15px;
 }
 
-#post_box_containers .post_box:hover{
+.post_box:hover{
     background-color: #e1e1e1;
     margin-bottom: 10px;
     border: thick double #e1e1e1;
@@ -16,3 +16,38 @@ h2{
     font-family: "Comic Sans MS";
     margin-bottom: 50px;
 }
+
+/*
+.post_box p{
+    display: inline-block;
+    font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 16px;
+    border-color: #eee #ddd #bbb;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    margin: 10px 5px;
+    padding: 0 16px 16px 16px;
+    !*max-width: 468px;*!
+}
+
+#post_box_containers h2 {
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 20px;
+}
+#post_box_containers a {
+    color: inherit;
+    font-weight: normal;
+    text-decoration: none;
+    outline: 0 none;
+}
+
+#post_box_containers a:hover,
+#post_box_containers a:focus {
+    text-decoration: underline;
+}
+*/

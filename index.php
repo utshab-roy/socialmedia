@@ -1,6 +1,7 @@
 <?php
 session_start();
 //var_dump($_SESSION);
+//session_destroy();
 ?>
 <!doctype html>
 <html lang="en">
@@ -21,6 +22,7 @@ session_start();
 <!--            login section-->
             <div id="form_messages" class="mt-3">
                 <?php
+                var_dump($_SESSION);
                 if(isset($_SESSION['message'])):
                     $message = $_SESSION['message'];
                     foreach ($message as $msg):

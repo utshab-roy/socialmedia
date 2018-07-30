@@ -38,6 +38,7 @@ if(isset($_POST['login']) && intval($_POST['login']) == 1){
     if(intval($output['validation']) == 1){
         //this function will check for the validation of the user login
         $success_messages = login_validation($email, $password);
+//        var_dump($_SESSION);
 //        var_dump($success_messages);
         $output['success_messages'] = $success_messages;
         echo json_encode($output);
