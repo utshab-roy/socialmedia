@@ -55,8 +55,8 @@ include 'config.php';
                 <?php
                 //if info column is not null then execute
                 if (!($row['info'] === '')):
-                    $address = json_decode($row['info']);
-                    foreach ($address as $key => $val):
+                    $info = json_decode($row['info']);
+                    foreach ($info as $key => $val):
                         if ($val === "") continue; ?>
                         <div class="row">
                             <div class="col-4">

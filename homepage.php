@@ -55,10 +55,13 @@ include 'config.php';
             ?>
             <div id="post_box_containers" class="mt-3">
                 <div id="new_post_wrapper">
-                    <form id="new_post_form" action="post" data-busy="0">
+                    <form id="new_post_form" method="post" data-busy="0" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="post_area"><h4>What's on your mind ?</h4></label>
                             <textarea class="form-control" id="post_area" name="post_area" rows="3"></textarea>
+
+                            <input type="file" name="file" id="file" class="form-control" style="width:30%" />
+
                             <div id="form_message"></div>
                         </div>
                         <input type="submit" class="btn btn-primary mb-3" id="add_post" name="add_post" value="Add Post" />
@@ -88,6 +91,7 @@ include 'config.php';
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
 <script src="js/jquery.validate.min.js"></script>
+<script src="http://malsup.github.com/jquery.form.js"></script>
 <script src="js/main.js?v=<?= $timestamp = time()?>"></script>
 </body>
 </html>

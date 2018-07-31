@@ -181,8 +181,13 @@ jQuery(document).ready(function ($) {
 
        var $busy = parseInt($this.data('busy'));
 
-       var $form = $('#new_post_form');
+       var file_data = $('#file').prop('files')[0];
        var post_content = $('#post_area').val();
+
+        var fd = new FormData();
+        fd.append('file', file_data);
+        fd.append('new_post', post_content);
+
 
         //now use the jq validation , if valid send ajax request
         // $form.validate({
@@ -209,7 +214,9 @@ jQuery(document).ready(function ($) {
                 $.ajax({
                     type: "POST",
                     url: "posts_ajax.php",
-                    data: 'new_post=' + post_content,
+                    data: fd,
+                    contentType: false, // The content type used when sending data to the server.
+                    processData: false, // To send DOMDocument or non processed data file it is set to false
                     dataType: 'json',
                     cache: false,
                     success: function (data) {
@@ -413,8 +420,6 @@ jQuery(document).ready(function ($) {
                             }
                             $user_info.append('<p>' + value + '</p>');
                         });
-
-
                         $user_info.show();
                     }
                 }//end of success message

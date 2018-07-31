@@ -174,8 +174,10 @@ function get_post_data_html($posts = array())
 
     foreach ($posts as $post) {
         $author = get_author_name_by_posts_id($post['id']);
+        $image = get_image_for_the_post($post['id']);
+//        var_dump($image);
         if ($_SESSION['user_id'] == $post['author_id']){
-            $output .= '<div class="post_box" data-postid="'. $post['id'] . '"><p><b><a href="user_profile.php">'.$author.'</a></b></p><p class="post_box_copy">' . $post['content'] . '</p><a type="button" class="btn btn-danger btn-sm float-right delete_post">Delete</a><a type="button" class="btn btn-primary btn-sm float-right edit_post">Edit</a></div>';
+            $output .= '<div class="post_box" data-postid="'. $post['id'] . '"><p><b><a href="user_profile.php">'.$author.'</a></b></p>'.$image.'<p class="post_box_copy">' . $post['content'] . '</p><a type="button" class="btn btn-danger btn-sm float-right delete_post">Delete</a><a type="button" class="btn btn-primary btn-sm float-right edit_post">Edit</a></div>';
         }else{
             $output .= '<div class="post_box" data-postid="'. $post['id'] . '"><p><b>'.$author.'</b></p><p class="post_box_copy">' . $post['content'] . '</p></div>';
         }
@@ -365,5 +367,55 @@ function get_all_user_info($user_id){
     $row = $result->fetch_assoc();
     return $row;
 }//end of user_profile method
+
+
+function get_image_for_the_post($post_id){
+    $image_name = $post_id.'.jpg';
+    $image_path = "uploads/" . $image_name;
+    if (file_exists("uploads/" . $image_name)) {
+        $image= "<img src='$image_path' alt='' width='50%' height='' style='display: block; margin-left: auto;margin-right: auto; width: 50%;'>";
+        return $image;
+    }
+}
+
+
+
+
+function image_upload($post_id){
+    if (isset($_FILES["file"]["type"])) {
+        $validextensions = array("jpeg", "jpg", "png");
+        $temporary       = explode(".", $_FILES["file"]["name"]);
+        $file_extension  = end($temporary);
+        if ((($_FILES["file"]["type"] == "image/png") || ($_FILES["file"]["type"] == "image/jpg") || ($_FILES["file"]["type"] == "image/jpeg")
+            ) && in_array($file_extension, $validextensions)) {
+            if ($_FILES["file"]["error"] > 0) {
+//            echo "Return Code: " . $_FILES["file"]["error"] . "<br/><br/>";
+            } else {
+                if (file_exists("upload/" . $_FILES["file"]["name"])) {
+//                echo $_FILES["file"]["name"] . " <span id='invalid'><b>already exists.</b></span> ";
+                } else {
+                    $sourcePath = $_FILES['file']['tmp_name']; // Storing source path of the file in a variable
+                    $targetPath = "uploads/" . $post_id.'.'.$file_extension; // Target path where file is to be stored
+                    move_uploaded_file($sourcePath, $targetPath); // Moving Uploaded file
+//                echo "<span id='success'>Image Uploaded Successfully...!!</span><br/>";
+//                echo "<br/><b>File Name:</b> " . $_FILES["file"]["name"] . "<br>";
+//                echo "<b>Type:</b> " . $_FILES["file"]["type"] . "<br>";
+//                echo "<b>Size:</b> " . ($_FILES["file"]["size"] / 1024) . " kB<br>";
+//                echo "<b>Temp file:</b> " . $_FILES["file"]["tmp_name"] . "<br>";
+                }
+            }
+        } else {
+//        echo "<span id='invalid'>***Invalid file Size or Type***<span>";
+        }
+    }
+}
+
+function get_post_id(){
+    global $conn_oop;
+    $sql = "SELECT id FROM posts ORDER BY id DESC LIMIT 1";
+    $result = $conn_oop->query($sql);
+    $row = $result->fetch_assoc();
+    return $row['id'];
+}
 
 
