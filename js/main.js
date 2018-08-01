@@ -333,8 +333,8 @@ jQuery(document).ready(function ($) {
 
 
 
+    //edit profile info
     var $edit_profile = $('#edit_profile');
-
     $edit_profile.on('click', function (e) {
         e.preventDefault();
         var $this = $(this);
@@ -389,7 +389,7 @@ jQuery(document).ready(function ($) {
 
             $.ajax({
                 type: "POST",
-                url: "user_profile_ajax.php",
+                url: "profile_ajax.php",
                 //data: 'post_id='+$post_id+'&updated_post='+$text_content_update,
                 data: $form.serialize(),
                 dataType: 'json',
@@ -411,14 +411,11 @@ jQuery(document).ready(function ($) {
 
                         // $user_info.each();
                         $.each( data, function( key, value ) {
-                            if( String(key) === 'info'){
-                                console.log($.parseJSON(value));
-                                // $.each(value, function (key, value) {
-                                //     $user_info.append('<p>' + key +': '+ value + '</p>');
-                                // });
-                                // console.log($.parseJSON(value));
+                            if((String(key) === 'Name') || (String(key) === 'email')){
+                                $user_info.append('<p>' + value + '</p>');
+                                return;
                             }
-                            $user_info.append('<p>' + value + '</p>');
+                            $user_info.append('<p>' + key +' : ' + value + '</p>');
                         });
                         $user_info.show();
                     }
@@ -429,8 +426,14 @@ jQuery(document).ready(function ($) {
         // $('.user_info').show();
     });//end of edit profile
 
-
-
+    $('.popup_link').magnificPopup({
+        // delegate: '.post_box',
+        type: 'image'
+        /*gallery:{
+            enabled:true
+        }*/
+        // other options
+    });
 
 
 

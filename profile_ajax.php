@@ -32,9 +32,9 @@ $website = isset($_POST['website']) ? $_POST['website'] : '';
 
 $info = array();
 
-$info['location'] = $location;
-$info['birth_date'] = $birth_date;
-$info['website'] = $website;
+$info['Location'] = $location;
+$info['Birthday'] = $birth_date;
+$info['Website'] = $website;
 
 $info = json_encode($info);
 
@@ -50,7 +50,11 @@ if(intval($output['validation']) == 1){
     if (isset($_POST['email']) && (!empty($email))){
         $success_messages = update_user_info($first_name, $last_name, $email, $info, $user_id);
         $output['success_messages'] = $success_messages;
-        $row = get_all_user_info($user_id);
+        $row['Name'] = $first_name .' '. $last_name;
+        $row['email'] = $email;
+        $row['Location'] = $location;
+        $row['Birthday'] = $birth_date;
+        $row['Website'] = $website;
         echo json_encode($row);
         die();
     }

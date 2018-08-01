@@ -2,6 +2,12 @@
 session_start();
 //var_dump($_SESSION);
 //session_destroy();
+if (isset($_SESSION['logged_in'])){
+    if($_SESSION['logged_in']) {
+        header("location:homepage.php");
+        die();
+    }
+}
 ?>
 <!doctype html>
 <html lang="en">

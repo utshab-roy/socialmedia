@@ -18,5 +18,7 @@ $conn_oop = new mysqli($servername, $username, $password, $dbname);
 if ($conn_oop->connect_error) {
     die("Connection failed: " . $conn_oop->connect_error);
 }
+include 'lib/Image_Manipulation.php';
+
 include 'all_function.php';
 //echo "Database Connected successfully";

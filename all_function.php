@@ -1,5 +1,8 @@
 <?php
 include 'mail_sender.php';
+
+
+
 /**this method will check the validation for login
  * @param $email
  * @param $password
@@ -18,7 +21,7 @@ function login_validation($email, $password)
         $_SESSION['logged_in'] = true;
         $row = $result->fetch_assoc();
         $_SESSION['user_id'] = $row['id'];
-        $_SESSION['name'] = $row['first_name'];
+        $_SESSION['name'] = $row['first_name'] . ' '. $row['last_name'];
 
         $success_messages['login'] = 'Successfully logged in !';
 //        header('location: admin/index.php');
@@ -175,11 +178,12 @@ function get_post_data_html($posts = array())
     foreach ($posts as $post) {
         $author = get_author_name_by_posts_id($post['id']);
         $image = get_image_for_the_post($post['id']);
+        $author_id = $post['author_id'];
 //        var_dump($image);
         if ($_SESSION['user_id'] == $post['author_id']){
-            $output .= '<div class="post_box" data-postid="'. $post['id'] . '"><p><b><a href="user_profile.php">'.$author.'</a></b></p>'.$image.'<p class="post_box_copy">' . $post['content'] . '</p><a type="button" class="btn btn-danger btn-sm float-right delete_post">Delete</a><a type="button" class="btn btn-primary btn-sm float-right edit_post">Edit</a></div>';
+            $output .= '<div class="post_box" data-postid="'. $post['id'] . '"><p><b><a href="profile.php?id='.$author_id.'">'.$author.'</a></b><p>Created at: 10-May-2010</p></p>'.$image.'<p class="post_box_copy">' . $post['content'] . '</p><a type="button" class="btn btn-danger btn-sm float-right delete_post">Delete</a><a type="button" class="btn btn-primary btn-sm float-right edit_post">Edit</a></div>';
         }else{
-            $output .= '<div class="post_box" data-postid="'. $post['id'] . '"><p><b>'.$author.'</b></p><p class="post_box_copy">' . $post['content'] . '</p></div>';
+            $output .= '<div class="post_box" data-postid="'. $post['id'] . '"><p><b><a href="profile.php?id='.$author_id.'">'.$author.'</a></b><p>Created at: 10-May-2010</p></p>'.$image.'<p class="post_box_copy">' . $post['content'] . '</p></div>';
         }
 //        $output .= '<div class="post_box" data-postid="'. $post['id'] . '"><p class="post_box_copy">' . $post['content'] . '</p><a type="button" class="btn btn-danger btn-sm float-right delete_post">Delete</a><a type="button" class="btn btn-primary btn-sm float-right edit_post">Edit</a></div>';
     }
@@ -187,11 +191,11 @@ function get_post_data_html($posts = array())
     return $output;
 }//end method get_post_data_html
 
-function add_new_post($title, $content, $user_id){
+function add_new_post($content, $user_id){
     global $conn_oop;
     $page_data = array();
 
-    $sql = "INSERT INTO posts (title, content, author_id) VALUES ('$title', '$content', '$user_id')";
+    $sql = "INSERT INTO posts (content, author_id) VALUES ('$content', '$user_id')";
     $conn_oop->query($sql);
 
     $new_sql = "SELECT * FROM posts ORDER BY id DESC LIMIT 1";
@@ -339,7 +343,7 @@ function get_all_user_data($user_id){
     $result = $conn_oop->query($sql);
     $row = $result->fetch_assoc();
     return $row;
-}//end of user_profile method
+}//end of   profile method
 
 
 
@@ -360,26 +364,22 @@ function update_user_info($first_name, $last_name, $email, $info, $user_id){
 }
 
 
-function get_all_user_info($user_id){
-    global $conn_oop;
-    $sql = "SELECT CONCAT(first_name,' ',last_name), email, info FROM users WHERE id=$user_id";
-    $result = $conn_oop->query($sql);
-    $row = $result->fetch_assoc();
-    return $row;
-}//end of user_profile method
-
 
 function get_image_for_the_post($post_id){
     $image_name = $post_id.'.jpg';
-    $image_path = "uploads/" . $image_name;
+
     if (file_exists("uploads/" . $image_name)) {
-        $image= "<img src='$image_path' alt='' width='50%' height='' style='display: block; margin-left: auto;margin-right: auto; width: 50%;'>";
+
+        //creating the object
+        $img = new Utshabimagemanipulator\Image_Manipulation("uploads/" . $image_name);
+        $img->thumbnail(5)->save_image('', 'thumbnail');
+        $image_path = "thumbnail/" . $image_name;
+        $image_path_original = "uploads/" . $image_name;
+
+        $image= "<a class='popup_link' href='$image_path_original'><img src='$image_path' alt='$post_id'  style='display: block; margin-left: auto;margin-right: auto; /*width: 50%;*/'></a>";
         return $image;
     }
 }
-
-
-
 
 function image_upload($post_id){
     if (isset($_FILES["file"]["type"])) {
@@ -419,3 +419,19 @@ function get_post_id(){
 }
 
 
+function get_user_data_by_author_id($author_id){
+    global $conn_oop;
+    $sql = "SELECT * FROM users WHERE id='$author_id'";
+    $result = $conn_oop->query($sql);
+    $row = $result->fetch_assoc();
+    return $row;
+}
+
+
+function get_user_data_by_id($user_id){
+    global $conn_oop;
+    $sql = "SELECT * FROM users WHERE id='$user_id'";
+    $result = $conn_oop->query($sql);
+    $row = $result->fetch_assoc();
+    return $row;
+}

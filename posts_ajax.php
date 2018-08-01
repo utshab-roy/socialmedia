@@ -34,7 +34,7 @@ $output['validation_messages'] = $validation_messages;
 
 if(intval($output['validation']) == 1){
     if (isset($_POST['new_post']) && (!empty($new_post))){
-        $post_array = add_new_post('Default Title',$new_post, $user_id);
+        $post_array = add_new_post($new_post, $user_id);
         $post_id = get_post_id();
         image_upload($post_id);
 

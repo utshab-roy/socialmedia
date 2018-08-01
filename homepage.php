@@ -2,7 +2,7 @@
 //starting the session for a user
 session_start();
 //if the user is unable to login then redirect to the login page
-var_dump($_SESSION);
+//var_dump($_SESSION);
 if(!$_SESSION['logged_in']) {
     header("location:index.php");
     die();
@@ -32,6 +32,32 @@ include 'config.php';
     <title>Homepage</title>
 </head>
 <body>
+
+<header>
+    <!-- Fixed navbar -->
+<!--    fixed-top call add can make the navbar fixed on the top-->
+    <nav class="navbar navbar-expand-md navbar-dark  bg-dark">
+        <a class="navbar-brand" href="homepage.php">Social Media</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="homepage.php">Homepage <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="profile.php">Profile</a>
+                </li>
+            </ul>
+            <form class="form-inline mt-2 mt-md-0">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+</header>
+
 <div class="container" style="padding-left: 100px; padding-right: 100px">
     <div class="row">
         <div class="col-md-12">
@@ -91,7 +117,7 @@ include 'config.php';
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
 <script src="js/jquery.validate.min.js"></script>
-<script src="http://malsup.github.com/jquery.form.js"></script>
+<script src="js/jquery.magnific-popup.js"></script>
 <script src="js/main.js?v=<?= $timestamp = time()?>"></script>
 </body>
 </html>
