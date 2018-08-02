@@ -236,6 +236,7 @@ jQuery(document).ready(function ($) {
 
                             //removing the text-area after successfully posting
                             $('textarea#post_area').val("");
+                            $('input#file').val(null);
                         }
                         $this.data('busy', 0);
                         $('#add_post').attr('value', 'Add Post');
@@ -428,10 +429,10 @@ jQuery(document).ready(function ($) {
 
     $('.popup_link').magnificPopup({
         // delegate: '.post_box',
-        type: 'image'
-        /*gallery:{
+        type: 'image',
+        gallery:{
             enabled:true
-        }*/
+        }
         // other options
     });
 

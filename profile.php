@@ -34,6 +34,8 @@ else{
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/style.css">
     <style>
     </style>
 
@@ -69,6 +71,7 @@ else{
 <div class="container">
     <div class="row">
         <div class="col-12">
+            <p style="text-align: right;">Sunshine, <?= $_SESSION["name"]?></p>
             <h2><?=$row['first_name'].' '.$row['last_name']?></h2>
             <a type="submit" href="homepage.php?logout=1" class="btn btn-danger float-right">Logout</a>
         </div>
@@ -77,11 +80,11 @@ else{
 <!--        This section is for user data-->
         <div class="col-4">
 <!--            Profile picture of the user-->
-            <img src="uploads/62.jpg" alt="avatar" class="img-thumbnail" style="width: 70%;border-radius:50%;" >
+            <img src="uploads/3.jpg" alt="avatar" class="img-thumbnail" style="width: 70%;border-radius:50%;" >
 
             <?php
             if (!isset($_GET['id'])) {
-                echo '<a type="button" data-user_id="' . $row['id'] . '" id="edit_profile" class="btn btn-primary float-right btn-sm">Edit Profile</a>';
+                echo '<a type="button" href="" data-user_id="' . $row['id'] . '" id="edit_profile" class="btn btn-primary float-right btn-sm">Edit Profile</a>';
             }elseif ($_GET['id'] == $_SESSION['user_id']){
                 echo '<a type="button" data-user_id="' . $row['id'] . '" id="edit_profile" class="btn btn-primary float-right btn-sm">Edit Profile</a>';
             }
@@ -94,7 +97,7 @@ else{
             <div class="user_info">
 
                 <p><?=$row['first_name'].' '. $row['last_name'];?></p>
-                <p><?=$row['email'];?></p>
+<!--                <p>--><?//=$row['email'];?><!--</p>-->
 
 
                 <?php
@@ -151,7 +154,7 @@ else{
                     echo '<div class="form-group">';
                     echo '<label for="post_area"><h4>What\'s on your mind ?</h4></label>';
                     echo '<textarea class="form-control" id="post_area" name="post_area" rows="3"></textarea>';
-                    echo '<input type="file" name="file" id="file" class="form-control" style="width:30%" />';
+                    echo '<input type="file" name="file" id="file" class="form-control" style="width:40%" />';
                     echo '<div id="form_message"></div>';
                     echo '</div>';
                     echo '<input type="submit" class="btn btn-primary mb-3" id="add_post" name="add_post" value="Add Post" />';

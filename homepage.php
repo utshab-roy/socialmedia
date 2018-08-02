@@ -28,6 +28,7 @@ include 'config.php';
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="css/magnific-popup.css">
     <link rel="stylesheet" href="css/style.css" />
     <title>Homepage</title>
 </head>
@@ -86,7 +87,7 @@ include 'config.php';
                             <label for="post_area"><h4>What's on your mind ?</h4></label>
                             <textarea class="form-control" id="post_area" name="post_area" rows="3"></textarea>
 
-                            <input type="file" name="file" id="file" class="form-control" style="width:30%" />
+                            <input type="file" name="file" id="file" class="form-control" style="width:40%" />
 
                             <div id="form_message"></div>
                         </div>
