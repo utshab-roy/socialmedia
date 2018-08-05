@@ -84,7 +84,7 @@ else{
 
             <?php
             if (!isset($_GET['id'])) {
-                echo '<a type="button" href="" data-user_id="' . $row['id'] . '" id="edit_profile" class="btn btn-primary float-right btn-sm">Edit Profile</a>';
+                echo '<a type="button" href="profile_edit.php" data-user_id="' . $row['id'] . '" id="edit_profile" class="btn btn-primary float-right btn-sm">Edit Profile</a>';
             }elseif ($_GET['id'] == $_SESSION['user_id']){
                 echo '<a type="button" data-user_id="' . $row['id'] . '" id="edit_profile" class="btn btn-primary float-right btn-sm">Edit Profile</a>';
             }

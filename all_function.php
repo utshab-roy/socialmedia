@@ -347,13 +347,13 @@ function get_all_user_data($user_id){
 
 
 
-function update_user_info($first_name, $last_name, $email, $info, $user_id){
+function update_user_info($first_name, $last_name, $email, $info, $password, $user_id){
     global $conn_oop;
 
     $success_messages = array();
     $error_messages = array();
 
-    $sql = "UPDATE users SET first_name='$first_name', last_name='$last_name', email='$email', info='$info' WHERE id='$user_id'";
+    $sql = "UPDATE users SET first_name='$first_name', last_name='$last_name', email='$email', info='$info', password=MD5('$password') WHERE id='$user_id'";
     if ($conn_oop->query($sql) === TRUE) {
         $success_messages['post_updated'] = 'Post updated successfully !';
         return $success_messages;
